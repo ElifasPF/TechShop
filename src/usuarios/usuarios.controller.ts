@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 
 class UsuariosController {
     async cadastrarUsuario(req: Request, res: Response) {
-        const { nome, idade, email, senha } = req.body
+        const { nome, idade, email, senha, tipo } = req.body
         if (!nome || !email || !senha) 
             return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios'})
         if (senha.length < 6)
@@ -13,11 +13,15 @@ class UsuariosController {
         if (!email.includes('@') || !email.includes('.'))
             return res.status(400).json({ mensagem: 'Email inválido'})
 
+        const usuarioExistente = await db.collection('usuarios').findOne({ email})
+        if (usuarioExistente)
+            return res.status(400).json({ mensagem: 'Usuário já cadastrado'})
         const senhaCriptografada = bcrypt.hashSync(senha, 10)
-        const usuario = { nome, email, senha: senhaCriptografada }
+        const tipoUsuario = tipo === 'admin' ? 'admin' : 'usuario'
+        const usuario = { nome, idade, email, senha: senhaCriptografada, tipo: tipoUsuario }
 
         const resultado = await db.collection('usuarios').insertOne(usuario)
-        res.status(201).json({ nome, idade, email, _id: resultado.insertedId})
+        res.status(201).json({ nome, idade, email, _id: resultado.insertedId, tipo: tipoUsuario })
     }
 
     async listar(req: Request, res: Response) {
@@ -35,10 +39,10 @@ class UsuariosController {
         if (!usuario)
             return res.status(404).json({ mensagem: 'Usuário não encontrado'})
         const senhaValida = bcrypt.compareSync(senha, usuario.senha)
-        if (!senhaValida)
+        if (!senhaValida)   
             return res.status(401).json({ mensagem: 'Senha inválida'})
 
-        const token = jwt.sign({ usuario_id: usuario._id }, process.env.JWT_SECRET!, { expiresIn: '1h' })
+        const token = jwt.sign({ usuario_id: usuario._id, tipo: usuario.tipo }, process.env.JWT_SECRET!, { expiresIn: '1h' })
         res.status(200).json({ token})
     }
 }
