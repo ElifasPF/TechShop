@@ -16,3 +16,10 @@ app.use(rotasAutenticadas)
 app.listen(8000, () => {
     console.log('Server is running on port 8000')
 })
+
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        mensagem: 'API TechShop is running!',
+        status: 'OK'
+    })
+})
