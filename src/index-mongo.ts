@@ -8,9 +8,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use(rotasNaoAutenticadas)
-app.use(rotasAutenticadas)
-
 app.get('/', (req, res) => {
     res.status(200).json({ 
         mensagem: 'API TechShop is running!',
@@ -18,6 +15,11 @@ app.get('/', (req, res) => {
     })
 })
 
+app.use(rotasNaoAutenticadas) // São as rotas públicas (cadastro, login)
+app.use(rotasAutenticadas) // São as rotas privadas (necessitam de autenticação (produtos, carrinho))
+
+const port = process.env.PORT || 8000
+
 app.listen(8000, () => {
-    console.log('Server is running on port 8000')
+    console.log(`Server is running on port ${port}`)
 })
