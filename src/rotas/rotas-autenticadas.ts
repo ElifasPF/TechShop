@@ -9,6 +9,7 @@ rotas.use(Auth)
 
 //Apenas administradores podem adicionar produtos
 rotas.post('/produtos', Auth, verificarAdmin, produtosController.adicionarProtudo)
+rotas.delete('/produtos/:id', Auth, verificarAdmin, produtosController.removerProduto)
 
 rotas.get('/produtos', produtosController.listarProdutos)
 
