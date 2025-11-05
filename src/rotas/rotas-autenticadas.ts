@@ -1,10 +1,15 @@
 import { Router } from "express"
+import Auth, { verificarAdmin } from "../middlewares/auth.js"
 
 import carrinhoController from "../carrinho/carrinho.controller.js"
 import produtosController from "../produtos/produtos.controller.js"
 
 const rotas = Router()
-rotas.post('/produtos', produtosController.adicionarProtudo)
+rotas.use(Auth)
+
+//Apenas administradores podem adicionar produtos
+rotas.post('/produtos', Auth, verificarAdmin, produtosController.adicionarProtudo)
+
 rotas.get('/produtos', produtosController.listarProdutos)
 
 rotas.post('/adicionarItem', carrinhoController.adicionarItem)
