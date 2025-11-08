@@ -1,7 +1,7 @@
-import { Router } from "express"
+import { Router } from 'express'
 
-import ProdutosController from "../produtos/produtos.controller.js"
-import UsuariosController from "../usuarios/usuarios.controller.js"
+import ProdutosController from '../produtos/produtos.controller.js'
+import UsuariosController from '../usuarios/usuarios.controller.js'
 
 const rotas = Router()
 rotas.post('/adicionarUsuario', UsuariosController.cadastrarUsuario)

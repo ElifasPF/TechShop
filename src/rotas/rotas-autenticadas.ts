@@ -1,8 +1,8 @@
-import { Router } from "express"
-import Auth, { verificarAdmin } from "../middlewares/auth.js"
+import { Router } from 'express'
+import Auth, { verificarAdmin } from '../middlewares/auth.js'
 
-import carrinhoController from "../carrinho/carrinho.controller.js"
-import produtosController from "../produtos/produtos.controller.js"
+import carrinhoController from '../carrinho/carrinho.controller.js'
+import produtosController from '../produtos/produtos.controller.js'
 
 const rotas = Router()
 rotas.use(Auth)
@@ -15,7 +15,7 @@ rotas.get('/produtos', produtosController.listarProdutos)
 
 rotas.post('/adicionarItem', carrinhoController.adicionarItem)
 rotas.post('/removerItem', carrinhoController.removerItem)
-rotas.get('/carrinho/:usuario_id', carrinhoController.listarCarrinho)
+rotas.get('/carrinho/', carrinhoController.listarCarrinho)
 rotas.delete('/carrinho/:usuario_id', carrinhoController.removerCarrinho)
 
 export default rotas
