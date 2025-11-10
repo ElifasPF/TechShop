@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 class UsuariosController {
   async cadastrarUsuario(req: Request, res: Response) {
     try {
-      const { nome, idade, email, senha, tipo } = req.body;
+      const { nome, email, senha, tipo } = req.body;
       if (!nome || !email || !senha)
         return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios' });
       if (senha.length < 6)
@@ -19,10 +19,10 @@ class UsuariosController {
         return res.status(400).json({ mensagem: 'Usuário já cadastrado' });
       const senhaCriptografada = bcrypt.hashSync(senha, 10);
       const tipoUsuario = tipo === 'admin' ? 'admin' : 'usuario';
-      const usuario = { nome, idade, email, senha: senhaCriptografada, tipo: tipoUsuario, };
+      const usuario = { nome, email, senha: senhaCriptografada, tipo: tipoUsuario, };
 
       const resultado = await db.collection('usuarios').insertOne(usuario);
-      res.status(201).json({ nome, idade, email, _id: resultado.insertedId, tipo: tipoUsuario, });
+      res.status(201).json({ nome, email, _id: resultado.insertedId, tipo: tipoUsuario, });
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
       res.status(500).json({ mensagem: 'Erro interno ao cadastrar usuário' });
