@@ -14,11 +14,8 @@ interface AutenticacaoRequest extends Request {
 function Auth(req: AutenticacaoRequest, res: Response, next: NextFunction) {
   const authHeaders = req.headers.authorization;
 
-  if (!authHeaders) {
-    return res
-      .status(401)
-      .json({ mensagem: 'O token não foi fornecido no Bearer' });
-  }
+  if (!authHeaders)
+    return res.status(401).json({ mensagem: 'O token não foi fornecido no Bearer' });
 
   const token = authHeaders.split(' ')[1];
   if (!token)
