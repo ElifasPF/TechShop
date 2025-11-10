@@ -1,10 +1,7 @@
-// src/carrinho/carrinho.controller.ts
-
 import { Request, Response } from 'express'
 import { db } from '../database/banco-mongo.js'
 import { ObjectId } from 'bson'
 
-// Interfaces locais (não precisam de 'export')
 interface ItemCarrinho {
     produtoId: string,
     quantidade: number,
@@ -18,18 +15,15 @@ interface Carrinho {
     total: number
 }
 
-// Interface para o 'req' que vem do middleware 'auth.ts'
 interface AutenticacaoRequest extends Request {
-    usuarioId?: string // <-- Esperamos 'usuarioId' (camelCase)
+    usuarioId?: string
 }
 
 class CarrinhoController {
 
-    // 1. FUNÇÃO ADICIONAR ITEM (SEGURA)
     async adicionarItem(req: AutenticacaoRequest, res: Response) {
         const { produtoId, quantidade } = req.body
 
-        // Verifica se o ID do token foi anexado
         if (!req.usuarioId)
             return res.status(401).json({ error: 'Usuário não autenticado' })
         const usuarioId = req.usuarioId
@@ -52,7 +46,7 @@ class CarrinhoController {
                     total: precoUnitario * quantidade
                 }
                 await db.collection('carrinhos').insertOne(novoCarrinho)
-                return res.status(201).json(novoCarrinho) // 201 = Criado
+                return res.status(201).json(novoCarrinho)
             }
 
             const itemExistente = carrinho.itens.find(item => item.produtoId === produtoId)
@@ -70,16 +64,15 @@ class CarrinhoController {
                 { usuarioId: usuarioId },
                 { $set: { itens: carrinho.itens, total: carrinho.total, dataAtualizacao: carrinho.dataAtualizacao } }
             )
-            return res.status(200).json(carrinho) // 200 = OK
+            return res.status(200).json(carrinho)
 
         } catch (error) {
             return res.status(400).json({ error: 'ID do produto inválido' })
         }
     }
 
-    // 2. FUNÇÃO REMOVER ITEM (SEGURA) - TAREFA B1
     async removerItem(req: AutenticacaoRequest, res: Response) {
-        const { produtoId } = req.body // Frontend envia o ID do produto
+        const { produtoId } = req.body
 
         if (!req.usuarioId)
             return res.status(401).json({ error: 'Usuário não autenticado' })
@@ -93,7 +86,7 @@ class CarrinhoController {
         if (itemIndex === -1)
             return res.status(404).json({ error: 'Item não encontrado no carrinho' })
 
-        carrinho.itens.splice(itemIndex, 1) // Remove o item
+        carrinho.itens.splice(itemIndex, 1)
 
         const total = carrinho.itens.reduce((acc, item) => acc + (item.precoUnitario * item.quantidade), 0)
         carrinho.dataAtualizacao = new Date()
@@ -105,7 +98,6 @@ class CarrinhoController {
         return res.status(200).json(carrinho)
     }
 
-    // 3. FUNÇÃO LISTAR CARRINHO (SEGURA)
     async listarCarrinho(req: AutenticacaoRequest, res: Response) {
         if (!req.usuarioId)
             return res.status(401).json({ error: 'Usuário não autenticado' })

@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-// interface para o que tem DENTRO do token
 interface DecodedToken {
-  usuario_id: string; // o token tem 'usuario_id'
+  usuario_id: string;
   tipo: 'admin' | 'user';
 }
 
