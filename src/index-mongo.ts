@@ -10,7 +10,9 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     res.status(200).json({ 
-        mensagem: 'API TechShop is running!',
+        mensagem: ['API TechShop funcionando!',
+            'Para rodar a aplicação, vá para: https://tech-shop-frontend-ecru.vercel.app/'
+        ],
         status: 'OK'
     })
 })
