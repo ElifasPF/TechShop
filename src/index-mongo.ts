@@ -22,6 +22,6 @@ app.use(rotasAutenticadas) // São as rotas privadas (necessitam de autenticaç�
 
 const port = process.env.PORT || 8000
 
-app.listen(8000, () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
