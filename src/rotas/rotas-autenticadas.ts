@@ -16,6 +16,5 @@ rotas.get('/produtos', produtosController.listarProdutos)
 rotas.post('/adicionarItem', carrinhoController.adicionarItem)
 rotas.post('/removerItem', carrinhoController.removerItem)
 rotas.get('/carrinho/', carrinhoController.listarCarrinho)
-rotas.delete('/carrinho/:usuario_id', carrinhoController.removerCarrinho)
 
 export default rotas

@@ -108,17 +108,6 @@ class CarrinhoController {
             return res.status(404).json({ error: 'Carrinho não encontrado' })
         return res.status(200).json(carrinho)
     }
-
-    async removerCarrinho(req: AutenticacaoRequest, res: Response) {
-        if (!req.usuarioId)
-            return res.status(401).json({ error: 'Usuário não autenticado' })
-        const usuarioId = req.usuarioId
-
-        const resultado = await db.collection('carrinhos').deleteOne({ usuarioId: usuarioId })
-        if (resultado.deletedCount === 0)
-            return res.status(404).json({ error: 'Carrinho não encontrado' })
-        return res.status(200).json({ message: 'Carrinho removido com sucesso' })
-    }
 }
 
 export default new CarrinhoController()
